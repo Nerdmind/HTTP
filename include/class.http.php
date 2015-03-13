@@ -1,5 +1,4 @@
 <?php
-
 class HTTP {
 	#====================================================================================================
 	# Eigenschaften: Zugriff auf die drei Request-Variablen
