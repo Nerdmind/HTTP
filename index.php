@@ -5,7 +5,7 @@
 require_once('include/class.http.php');
 
 #====================================================================================================
-# HTTP-Klasse initialisieren
+# [DEPRECATED] HTTP-Klasse initialisieren
 #====================================================================================================
 HTTP::init();
 
@@ -13,16 +13,16 @@ HTTP::init();
 # EXAMPLE: Prüfen, ob GET-Parameter gesetzt sind
 #====================================================================================================
 if(HTTP::issetGET('parameter_one', 'parameter_two', 'parameter_three')) {
-	$parameter_one = HTTP::$GET['parameter_one'];
-	$parameter_two = HTTP::$GET['parameter_two'];
+	$parameter_one = HTTP::GET('parameter_one');
+	$parameter_two = HTTP::GET('parameter_two');
 }
 
 #====================================================================================================
 # EXAMPLE: Prüfen, ob POST-Parameter gesetzt sind
 #====================================================================================================
 if(HTTP::issetPOST('parameter_one', 'parameter_two', 'parameter_three')) {
-	$parameter_one = HTTP::$POST['parameter_one'];
-	$parameter_two = HTTP::$POST['parameter_two'];
+	$parameter_one = HTTP::POST('parameter_one');
+	$parameter_two = HTTP::POST('parameter_two');
 }
 
 #====================================================================================================
