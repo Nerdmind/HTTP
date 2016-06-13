@@ -2,7 +2,7 @@
 #====================================================================================================
 # HTTP-Klasse einbinden
 #====================================================================================================
-require_once('include/class.http.php');
+require_once('include/HTTP.php');
 
 #====================================================================================================
 # [DEPRECATED] HTTP-Klasse initialisieren
@@ -60,7 +60,7 @@ HTTP::responseStatus(200);
 HTTP::responseHeader(HTTP::HEADER_CONTENT_TYPE, HTTP::CONTENT_TYPE_TEXT);
 
 #====================================================================================================
-# EXAMPLE: Eine HTTP-Weiterleitung an den Client schicken
+# EXAMPLE: Eine HTTP-Weiterleitung an den Client schicken und Skript abbrechen
 #====================================================================================================
 # HTTP::redirect('https://example.org/');
 # HTTP::redirect('https://example.org/', 303);

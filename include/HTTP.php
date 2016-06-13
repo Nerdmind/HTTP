@@ -88,8 +88,8 @@ class HTTP {
 		$current = &$data;
 
 		foreach($paths as $path) {
-			if(!isset($current[$path]) OR !is_string($current[$path])) {
-				return FALSE;
+			if(!isset($current[$path]) OR (!is_string($current[$path]) AND !is_array($current[$path]))) {
+				return NULL;
 			}
 			$current = &$current[$path];
 		}
@@ -112,6 +112,13 @@ class HTTP {
 	}
 
 	#===============================================================================
+	# FILE-Wert abfragen
+	#===============================================================================
+	public static function FILE() {
+		return self::returnKey(self::$FILE, func_get_args());
+	}
+
+	#===============================================================================
 	# Prüft ob alle Elemente von $keys als $_POST-Schlüssel gesetzt sind
 	#===============================================================================
 	public static function issetPOST() {
@@ -123,6 +130,13 @@ class HTTP {
 	#===============================================================================
 	public static function issetGET() {
 		return self::issetData(self::$GET, func_get_args());
+	}
+
+	#===============================================================================
+	# Prüft ob alle Elemente von $keys als $_GET-Schlüssel gesetzt sind
+	#===============================================================================
+	public static function issetFILE() {
+		return self::issetData(self::$FILE, func_get_args());
 	}
 
 	#===============================================================================
@@ -179,15 +193,16 @@ class HTTP {
 	# Sendet eine Headerzeile an den Client
 	#===============================================================================
 	public static function responseHeader($field, $value) {
-		self::sendHeader("{$field}:{$value}");
+		self::sendHeader("{$field}: {$value}");
 	}
 
 	#===============================================================================
 	# Sendet einen HTTP-Redirect an den Client
 	#===============================================================================
-	public static function redirect($location, $code = 303) {
+	public static function redirect($location, $code = 303, $exit = TRUE) {
 		self::sendHeader(self::getStatuscode($code));
 		self::sendHeader("Location: {$location}");
+		$exit AND exit();
 	}
 
 	#===============================================================================
