@@ -154,29 +154,21 @@ class HTTP {
 	# Gibt die relativ aufgerufene URL zurück
 	#===============================================================================
 	public static function requestURI() {
-		if(isset($_SERVER['REQUEST_URI'])) {
-			return $_SERVER['REQUEST_URI'];
-		}
+		return $_SERVER['REQUEST_URL'] ?? FALSE;
 	}
 
 	#===============================================================================
 	# Inhalt des User-Agent:-Feldes im HTTP-Header
 	#===============================================================================
 	public static function useragent() {
-		if(isset($_SERVER['HTTP_USER_AGENT'])) {
-			return trim($_SERVER['HTTP_USER_AGENT']);
-		}
-		return '';
+		return trim($_SERVER['HTTP_USER_AGENT'] ?? '');
 	}
 
 	#===============================================================================
 	# Inhalt des Referer:-Feldes im HTTP-Header
 	#===============================================================================
 	public static function referer() {
-		if(isset($_SERVER['HTTP_REFERER'])) {
-			return trim($_SERVER['HTTP_REFERER']);
-		}
-		return '';
+		return trim($_SERVER['HTTP_REFERER'] ?? '');
 	}
 
 	#===============================================================================
