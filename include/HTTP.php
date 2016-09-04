@@ -1,21 +1,25 @@
 <?php
 class HTTP {
-	#===============================================================================
-	# Eigenschaften: Zugriff auf die drei Request-Variablen
-	#===============================================================================
 	private static $GET  = NULL;
 	private static $POST = NULL;
 	private static $FILE = NULL;
 
 	#===============================================================================
-	# Konstanten: HTTP-Headerfelder
+	# HTTP protocol versions
+	#===============================================================================
+	const HTTP_VERSION_1_0 = 'HTTP/1.0';
+	const HTTP_VERSION_1_1 = 'HTTP/1.1';
+	const HTTP_VERSION_2_0 = 'HTTP/2.0';
+
+	#===============================================================================
+	# HTTP header fields
 	#===============================================================================
 	const HEADER_CONTENT_TYPE      = 'Content-Type';
 	const HEADER_TRANSFER_ENCODING = 'Transfer-Encoding';
 	const HEADER_ACCESS_CONTROL    = 'Access-Control-Allow-Origin';
 
 	#===============================================================================
-	# Konstanten: Werte für die HTTP-Headerfelder
+	# Values for HTTP header fields
 	#===============================================================================
 	const CONTENT_TYPE_JSCRIPT = 'application/x-javascript; charset=UTF-8';
 	const CONTENT_TYPE_TEXT    = 'text/plain; charset=UTF-8';
@@ -24,7 +28,7 @@ class HTTP {
 	const CONTENT_TYPE_XML     = 'text/xml; charset=UTF-8';
 
 	#===============================================================================
-	# Initialisiert die Eigenschaften $GET, $POST und $FILE
+	# Initialize $GET, $POST and $FILE
 	#===============================================================================
 	public static function init($trimValues = TRUE) {
 		self::$GET  = ($trimValues === TRUE ? self::trim($_GET)  : $_GET );
@@ -33,26 +37,26 @@ class HTTP {
 	}
 
 	#===============================================================================
-	# Gibt eine valide Statuscodezeile für den HTTP Response-Header zurück
+	# Return a HTTP status code header description
 	#===============================================================================
 	private static function getStatuscode($code) {
 		return [
-			200 => 'HTTP/1.1 200 OK',
-			301 => 'HTTP/1.1 301 Moved Permanently',
-			302 => 'HTTP/1.1 302 Found',
-			303 => 'HTTP/1.1 303 See Other',
-			307 => 'HTTP/1.1 307 Temporary Redirect',
-			400 => 'HTTP/1.1 400 Bad Request',
-			401 => 'HTTP/1.1 401 Authorization Required',
-			403 => 'HTTP/1.1 403 Forbidden',
-			404 => 'HTTP/1.1 404 Not Found',
-			500 => 'HTTP/1.1 500 Internal Server Error',
-			503 => 'HTTP/1.1 503 Service Temporarily Unavailable',
+			200 => 'OK',
+			301 => 'Moved Permanently',
+			302 => 'Found',
+			303 => 'See Other',
+			307 => 'Temporary Redirect',
+			400 => 'Bad Request',
+			401 => 'Authorization Required',
+			403 => 'Forbidden',
+			404 => 'Not Found',
+			500 => 'Internal Server Error',
+			503 => 'Service Temporarily Unavailable',
 		][$code];
 	}
 
 	#===============================================================================
-	# Trimmt alle Strings im übergebenen Parameter (auch Arrays)
+	# Trim all strings in argument
 	#===============================================================================
 	private static function trim($mixed) {
 		if(is_array($mixed)) {
@@ -63,7 +67,7 @@ class HTTP {
 	}
 
 	#===============================================================================
-	# Prüft ob alle Elemente von $arguments als $data-Schlüssel gesetzt sind
+	# Checks if all elements of $arguments are set as key of $data
 	#===============================================================================
 	private static function issetData($data, $arguments) {
 		foreach($arguments as $key) {
@@ -82,7 +86,7 @@ class HTTP {
 	}
 
 	#===============================================================================
-	# Gibt den Wert aus einen der drei Eigenschaften anhand von $paths zurück
+	# Return null or the value (if set) from one of the three requests attributes
 	#===============================================================================
 	public static function returnKey($data, Array $paths) {
 		$current = &$data;
@@ -98,49 +102,49 @@ class HTTP {
 	}
 
 	#===============================================================================
-	# GET-Wert abfragen
+	# Return GET value
 	#===============================================================================
 	public static function GET() {
 		return self::returnKey(self::$GET, func_get_args());
 	}
 
 	#===============================================================================
-	# POST-Wert abfragen
+	# Return POST value
 	#===============================================================================
 	public static function POST() {
 		return self::returnKey(self::$POST, func_get_args());
 	}
 
 	#===============================================================================
-	# FILE-Wert abfragen
+	# Return FILE value
 	#===============================================================================
 	public static function FILE() {
 		return self::returnKey(self::$FILE, func_get_args());
 	}
 
 	#===============================================================================
-	# Prüft ob alle Elemente von $keys als $_POST-Schlüssel gesetzt sind
+	# Checks if all elements of func_get_args() are set key of self::$POST
 	#===============================================================================
 	public static function issetPOST() {
 		return self::issetData(self::$POST, func_get_args());
 	}
 
 	#===============================================================================
-	# Prüft ob alle Elemente von $keys als $_GET-Schlüssel gesetzt sind
+	# Checks if all elements of func_get_args() are set key of self::$GET
 	#===============================================================================
 	public static function issetGET() {
 		return self::issetData(self::$GET, func_get_args());
 	}
 
 	#===============================================================================
-	# Prüft ob alle Elemente von $keys als $_GET-Schlüssel gesetzt sind
+	# Checks if all elements of func_get_args() are set key of self::$FILE
 	#===============================================================================
 	public static function issetFILE() {
 		return self::issetData(self::$FILE, func_get_args());
 	}
 
 	#===============================================================================
-	# Gibt die HTTP-Anfragemethode zurück oder prüft diese
+	# Return HTTP request method or check if request method equals with $method
 	#===============================================================================
 	public static function requestMethod($method = NULL) {
 		if(!empty($method)) {
@@ -151,54 +155,54 @@ class HTTP {
 	}
 
 	#===============================================================================
-	# Gibt die relativ aufgerufene URL zurück
+	# Return REQUEST_URL
 	#===============================================================================
 	public static function requestURI() {
 		return $_SERVER['REQUEST_URL'] ?? FALSE;
 	}
 
 	#===============================================================================
-	# Inhalt des User-Agent:-Feldes im HTTP-Header
+	# Return HTTP_USER_AGENT
 	#===============================================================================
 	public static function useragent() {
 		return trim($_SERVER['HTTP_USER_AGENT'] ?? '');
 	}
 
 	#===============================================================================
-	# Inhalt des Referer:-Feldes im HTTP-Header
+	# Return HTTP_REFERER
 	#===============================================================================
 	public static function referer() {
 		return trim($_SERVER['HTTP_REFERER'] ?? '');
 	}
 
 	#===============================================================================
-	# Gibt den HTTP-Statuscode der aktuellen Anfrage zurück oder sendet ihn
+	# Return response status
 	#===============================================================================
 	public static function responseStatus($code = NULL) {
 		if(!empty($code)) {
-			return self::sendHeader(self::getStatuscode($code));
+			self::sendHeader(sprintf('HTTP/1.1 %d %s', $code, self::getStatuscode($code)));
 		}
 		return http_response_code();
 	}
 
 	#===============================================================================
-	# Sendet eine Headerzeile an den Client
+	# Sends a HTTP header line to the client
 	#===============================================================================
 	public static function responseHeader($field, $value) {
 		self::sendHeader("{$field}: {$value}");
 	}
 
 	#===============================================================================
-	# Sendet einen HTTP-Redirect an den Client
+	# Sends a HTTP redirect to the client
 	#===============================================================================
 	public static function redirect($location, $code = 303, $exit = TRUE) {
-		self::sendHeader(self::getStatuscode($code));
+		self::sendHeader(sprintf('HTTP/1.1 %d %s', $code, self::getStatuscode($code)));
 		self::sendHeader("Location: {$location}");
 		$exit AND exit();
 	}
 
 	#===============================================================================
-	# Sendet eine neue Headerzeile an den Client wenn noch keine Ausgabe gemacht wurde
+	# Sends a new HTTP header line to the client if headers are not already sent
 	#===============================================================================
 	private static function sendHeader($header) {
 		if(!headers_sent()) {
