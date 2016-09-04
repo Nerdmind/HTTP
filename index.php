@@ -16,7 +16,7 @@ if(HTTP::issetGET('parameter_one', 'parameter_two', 'parameter_three')) {
 	$parameter_one = HTTP::GET('parameter_one');
 	$parameter_two = HTTP::GET('parameter_two');
 
-	var_dump($parameter_one, $parameter_two);
+	var_dump($parameter_one, $parameter_two, HTTP::GET('parameter_three'));
 }
 
 #====================================================================================================
@@ -25,6 +25,8 @@ if(HTTP::issetGET('parameter_one', 'parameter_two', 'parameter_three')) {
 if(HTTP::issetPOST('parameter_one', 'parameter_two', 'parameter_three')) {
 	$parameter_one = HTTP::POST('parameter_one');
 	$parameter_two = HTTP::POST('parameter_two');
+
+	var_dump($parameter_one, $parameter_two, HTTP::POST('parameter_three'));
 }
 
 #====================================================================================================
